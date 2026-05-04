@@ -179,12 +179,16 @@ export default function App() {
           localStorage.setItem('fmt_admin_auth', 'true');
           setIsAdminOpen(true);
         } catch (err: any) {
-          console.error('Auth Error:', err);
+          console.error('Auth Error Full:', err);
+          let msg = 'Error de autenticación: ' + (err.message || 'Desconocido');
+          
           if (err.code === 'auth/operation-not-allowed') {
-            alert('ERROR: Debes habilitar "Anonymous Sign-in" en la consola de Firebase (Authentication > Sign-in method).');
-          } else {
-            alert('Error de autenticación: ' + (err.message || 'Desconocido'));
+            msg = 'ERROR: Debes habilitar "Anonymous Sign-in" en la consola de Firebase (Authentication > Sign-in method). Presiona el switch "Enable" y guarda los cambios.';
+          } else if (err.code === 'auth/unauthorized-domain') {
+            msg = 'ERROR: Este dominio no está autorizado. Debes ir a Firebase Console > Authentication > Settings > Authorized Domains y agregar este dominio: ' + window.location.hostname;
           }
+          
+          alert(msg);
         }
       } else if (pass !== null) {
         alert('Contraseña incorrecta');
