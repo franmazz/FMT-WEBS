@@ -1,0 +1,70 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helpers
+    function isSignedIn() { return request.auth != null; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    // Content Validation
+    function isValidSiteContent(data) {
+      return data.keys().hasAll(['heroTitle', 'heroSubtitle', 'heroStats', 'aboutText', 'adminPassword'])
+        && data.heroTitle is string && data.heroTitle.size() < 500
+        && data.heroSubtitle is string && data.heroSubtitle.size() < 1000
+        && data.adminPassword is string && data.adminPassword.size() < 100;
+    }
+
+    function isValidService(data) {
+      return data.keys().hasAll(['name', 'description', 'timeBadge', 'iconName'])
+        && data.name is string && data.name.size() < 100
+        && data.description is string && data.description.size() < 1000;
+    }
+
+    function isValidPortfolio(data) {
+      return data.keys().hasAll(['name', 'description', 'link', 'badge', 'emoji', 'order'])
+        && data.name is string && data.name.size() < 100
+        && data.order is number;
+    }
+
+    // Site configuration
+    match /config/site {
+      allow read: if true;
+      allow write: if isSignedIn() && isValidSiteContent(incoming());
+    }
+
+    // Services, Plans, and Portfolio
+    match /services/{serviceId} {
+      allow read: if true;
+      allow write: if isSignedIn() && isValidService(incoming());
+    }
+    match /plans/{planId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+    match /portfolio/{itemId} {
+      allow read: if true;
+      allow write: if isSignedIn() && isValidPortfolio(incoming());
+    }
+
+    // Consultas
+    match /consultas/{id} {
+      allow create: if incoming().keys().hasAll(['nombre', 'contacto', 'planInteres'])
+                   && incoming().nombre.size() < 100
+                   && incoming().contacto.size() < 200;
+      allow read, delete: if isSignedIn();
+    }
+
+    // Pedidos
+    match /pedidos/{id} {
+      allow create: if incoming().keys().hasAll(['planId', 'planName', 'amount'])
+                   && incoming().amount is number;
+      allow read: if isSignedIn();
+    }
+  }
+}

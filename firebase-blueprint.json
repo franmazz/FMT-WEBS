@@ -1,0 +1,107 @@
+{
+  "entities": {
+    "SiteContent": {
+      "title": "Site Content",
+      "description": "Global editable content for the website",
+      "type": "object",
+      "properties": {
+        "heroTitle": { "type": "string" },
+        "heroSubtitle": { "type": "string" },
+        "heroStats": { "type": "object" },
+        "aboutText": { "type": "string" },
+        "adminPassword": { "type": "string" }
+      }
+    },
+    "Service": {
+      "title": "Service",
+      "description": "Service offered by the agency",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "timeBadge": { "type": "string" },
+        "iconName": { "type": "string" }
+      }
+    },
+    "Plan": {
+      "title": "Plan",
+      "description": "Pricing plan",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "price": { "type": "number" },
+        "features": { "type": "array" },
+        "delivery": { "type": "string" },
+        "mpLink": { "type": "string" },
+        "isFeatured": { "type": "boolean" }
+      }
+    },
+    "PortfolioItem": {
+      "title": "Portfolio Item",
+      "description": "A project in the agency portfolio",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "link": { "type": "string" },
+        "badge": { "type": "string" },
+        "emoji": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "order": { "type": "number" }
+      }
+    },
+    "Consulta": {
+      "title": "Consulta",
+      "description": "Contact form submission",
+      "type": "object",
+      "properties": {
+        "nombre": { "type": "string" },
+        "contacto": { "type": "string" },
+        "negocio": { "type": "string" },
+        "planInteres": { "type": "string" },
+        "mensaje": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["nombre", "contacto", "planInteres"]
+    },
+    "Pedido": {
+      "title": "Pedido",
+      "description": "Plan purchase click event",
+      "type": "object",
+      "properties": {
+        "planId": { "type": "string" },
+        "planName": { "type": "string" },
+        "amount": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "firestore": {
+    "config/site": {
+      "schema": "SiteContent",
+      "description": "Main site configuration and content"
+    },
+    "services": {
+      "schema": "Service",
+      "description": "Collection of services"
+    },
+    "plans": {
+      "schema": "Plan",
+      "description": "Pricing plans"
+    },
+    "portfolio": {
+      "schema": "PortfolioItem",
+      "description": "Portfolio projects"
+    },
+    "consultas": {
+      "schema": "Consulta",
+      "description": "User inquiries"
+    },
+    "pedidos": {
+      "schema": "Pedido",
+      "description": "Purchase logs"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Syne:wght@600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-electric-blue: #2563EB;
+  --color-cyan-glow: #06b6d4;
+  --color-dark-bg: #080c14;
+  
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Syne", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-dark-bg text-white font-sans selection:bg-electric-blue/30;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+.glass-nav {
+  @apply bg-dark-bg/80 backdrop-blur-xl border-b border-white/5;
+}
+
+.frosted-card {
+  @apply bg-white/5 backdrop-blur-sm border border-white/5 rounded-3xl transition-all duration-300;
+}
+
+.frosted-card-hover {
+  @apply hover:bg-white/[0.08] hover:border-white/10 hover:shadow-2xl hover:shadow-electric-blue/10;
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-electric-blue to-cyan-glow;
+}
+
+.dots-bg {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
